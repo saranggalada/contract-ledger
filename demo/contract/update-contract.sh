@@ -7,7 +7,7 @@ if [[ -z "${TDP_USERNAME}" ]]; then
   exit 1
 fi
 
-if [[ -z "${TDP_KEYVAULT}" ]]; then
+if [[ -z "${AZURE_KEYVAULT_ENDPOINT}" ]]; then
   echo "No TDP key vault specified"
   exit 1
 fi
@@ -23,5 +23,5 @@ export TDC_DID="did:web:$TDC_USERNAME.github.io"
 TMP=$(jq '.tdc = env.TDC_DID' demo/contract/contract.json)
 TMP=`echo $TMP | jq '.tdps[0] = env.TDP_DID'`
 TMP=`echo $TMP | jq '.datasets[].provider = env.TDP_DID'`
-TMP=`echo $TMP | jq '.datasets[].key.properties.endpoint = env.TDP_KEYVAULT'`
+TMP=`echo $TMP | jq '.datasets[].key.properties.endpoint = env.AZURE_KEYVAULT_ENDPOINT'`
 echo $TMP > ./tmp/contracts/contract.json

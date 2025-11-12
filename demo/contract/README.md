@@ -4,7 +4,7 @@ This demo shows participants in the DEPA training framework using a [did:web](ht
 
 ## Prerequisites
 
-This demo requires a running contract service, and two GitHub accounts and two GitHub Pages user/organization sites, one for the TDP and one for the TDC. To create a GitHub page site, follow the [GitHub Pages user/organization documentation](https://pages.github.com/). You will be asked to create a new repository with the URL `<username>.github.io`. If you don't have two GitHub accounts or you don't want to use the GitHub Pages site associated with your account, you can create a new user on [GitHub](https://github.com/signup).
+This demo requires a running contract service, and two GitHub accounts and two GitHub Pages user/organization sites, one for the TDPs (or a Data Collective aggregating and publishing datasets) and one for the TDC. To create a GitHub page site, follow the [GitHub Pages user/organization documentation](https://pages.github.com/). You will be asked to create a new repository with the URL `<username>.github.io`. If you don't have two GitHub accounts or you don't want to use the GitHub Pages site associated with your account, you can create a new user on [GitHub](https://github.com/signup).
 
 If you plan to use the contract with a CCR, you will need the location of the key vault that contains the TDP's encryption keys. 
 
@@ -24,9 +24,9 @@ For simplicity, we provide a sample utility which modifies the DIDs of the TDP a
 
 ```bash
 export TDP_USERNAME=<tdp_username>
-export TDP_KEYVAULT=<tdp_keyvault_url>
+export AZURE_KEYVAULT_ENDPOINT=<tdp_keyvault_url>
 export TDC_USERNAME=<tdc_username>
-export CONTRACT_URL=<contract_service_url>
+export CONTRACT_SERVICE_URL=<contract_service_url>
 ./demo/contract/update_contract.sh
 ```
 

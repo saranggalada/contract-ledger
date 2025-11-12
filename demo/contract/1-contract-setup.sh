@@ -6,14 +6,14 @@ set -ex
 
 mkdir -p tmp
 
-CONTRACT_URL=${CONTRACT_URL:-"https://127.0.0.1:8000"}
+CONTRACT_SERVICE_URL=${CONTRACT_SERVICE_URL:-"https://127.0.0.1:8000"}
 
 curl -o tmp/cacert.pem "https://ccadb.my.salesforce-sites.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Websites"
 
 if ! [ -z $OPERATOR ]; then
     scitt governance propose_ca_certs \
         --ca-certs tmp/cacert.pem \
-        --url $CONTRACT_URL \
+        --url $CONTRACT_SERVICE_URL \
         --member-key workspace/member0_privk.pem \
         --member-cert workspace/member0_cert.pem \
         --name x509_roots \
@@ -30,4 +30,4 @@ fi
 TRUST_STORE=tmp/trust_store
 mkdir -p $TRUST_STORE
 
-curl -k -f $CONTRACT_URL/parameters > $TRUST_STORE/scitt.json
+curl -k -f $CONTRACT_SERVICE_URL/parameters > $TRUST_STORE/scitt.json

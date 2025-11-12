@@ -5,13 +5,13 @@
     "expiryTime": "2024-03-14T00:00:00.000Z",
     "tdc": "",
     "tdps": [],
-    "ccrp": "did:web:ccrprovider.github.io",
+    "ccrp": "did:web:$CCRP_USERNAME.github.io",
     "datasets": [
         {
             "id": "19517ba8-bab8-11ed-afa1-0242ac120002",
             "owner": "brats_A",
             "name": "BraTS_Brain_MRI_set_A",
-            "url": "https://depatrainccrdev.blob.core.windows.net/bratsacontainer/data.img",
+            "url": "https://$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net/$AZURE_BRATS_A_CONTAINER_NAME/data.img",
             "provider": "",
             "key": {
                 "type": "azure",
@@ -28,7 +28,7 @@
             "id": "216d5cc6-bab8-11ed-afa1-0242ac120002",
             "owner": "brats_B",
             "name": "BraTS_Brain_MRI_set_B",
-            "url": "https://depatrainccrdev.blob.core.windows.net/bratsbcontainer/data.img",
+            "url": "https://$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net/$AZURE_BRATS_B_CONTAINER_NAME/data.img",
             "provider": "",
             "key": {
                 "type": "azure",
@@ -45,7 +45,7 @@
             "id": "2830a144-bab8-11ed-afa1-0242ac120002",
             "owner": "brats_C",
             "name": "BraTS_Brain_MRI_set_C",
-            "url": "https://depatrainccrdev.blob.core.windows.net/bratsccontainer/data.img",
+            "url": "https://$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net/$AZURE_BRATS_C_CONTAINER_NAME/data.img",
             "provider": "",
             "key": {
                 "type": "azure",
@@ -62,7 +62,7 @@
             "id": "2a3b0c4e-bab8-11ed-afa1-0242ac120002",
             "owner": "brats_D",
             "name": "BraTS_Brain_MRI_set_D",
-            "url": "https://depatrainccrdev.blob.core.windows.net/bratsdcontainer/data.img",
+            "url": "https://$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net/$AZURE_BRATS_D_CONTAINER_NAME/data.img",
             "provider": "",
             "key": {
                 "type": "azure",
