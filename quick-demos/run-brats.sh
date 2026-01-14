@@ -11,18 +11,18 @@
 # 3. Copy the contract template and update with environment variables
 cp quick-demos/brats-contract-template.json ./demo/contract/contract_template.json
 
-export TDP_USERNAME=ccrdepatesttdp
-export TDC_USERNAME=ccrdepatesttdc
-export CCRP_USERNAME=ccrprovider
-export AZURE_STORAGE_ACCOUNT_NAME=depatraindemo
+export TDP_USERNAME=<tdp-username>
+export TDC_USERNAME=<tdc-username>
+export CCRP_USERNAME=<ccrp-username>
+export AZURE_STORAGE_ACCOUNT_NAME=<storage-account-name>
 
-export AZURE_KEYVAULT_ENDPOINT=depa-train-ccr-dev-akv.vault.azure.net
-export CONTRACT_SERVICE_URL=https://216.48.178.54:8000
+export AZURE_KEYVAULT_ENDPOINT=<akv>.vault.azure.net
+export CONTRACT_SERVICE_URL=https://<contract-service-url>:8000
 
-export AZURE_BRATS_A_CONTAINER_NAME=bratsacontainer
-export AZURE_BRATS_B_CONTAINER_NAME=bratsbcontainer
-export AZURE_BRATS_C_CONTAINER_NAME=bratsccontainer
-export AZURE_BRATS_D_CONTAINER_NAME=bratsdcontainer
+export AZURE_BRATS_A_CONTAINER_NAME=<brats-a-container-name>
+export AZURE_BRATS_B_CONTAINER_NAME=<brats-b-container-name>
+export AZURE_BRATS_C_CONTAINER_NAME=<brats-c-container-name>
+export AZURE_BRATS_D_CONTAINER_NAME=<brats-d-container-name>
 
 envsubst < demo/contract/contract_template.json > demo/contract/contract.json
 ./demo/contract/update-contract.sh
