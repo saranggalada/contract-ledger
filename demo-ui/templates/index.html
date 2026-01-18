@@ -1341,7 +1341,7 @@
 
                     <div id="validate-output"></div>
 
-                    <div class="reset-container" id="completion-actions">
+                    <div class="reset-container" id="completion-actions" style="display: none;">
                         <p style="color: var(--text-muted); margin-bottom: 0.75rem;">Contract signing process complete!</p>
                         
                         <!-- Show different options based on role -->
@@ -1469,6 +1469,12 @@
             state.currentStep = typeof stepNum === 'string' ? parseFloat(stepNum.replace('-', '.')) : stepNum;
             updateProgressSteps();
             showStep(stepNum);
+            
+            // Hide completion actions when navigating (will be shown again after validation)
+            const completionContainer = document.getElementById('completion-actions');
+            if (completionContainer) {
+                completionContainer.style.display = 'none';
+            }
             
             // Check GitHub auth when entering step 4 (Create DID)
             if (stepNum === 4) {
@@ -1881,10 +1887,23 @@
         }
 
         function showCompletionActions() {
+            const completionContainer = document.getElementById('completion-actions');
             const tdpCompletion = document.getElementById('tdp-completion');
             const tdcCompletion = document.getElementById('tdc-completion');
             
-            if (state.role === 'tdp') {
+            // Get role as string and normalize
+            const role = String(state.role || '').toLowerCase().trim();
+            
+            console.log('showCompletionActions called, role:', role, 'state.role:', state.role);
+            
+            // Always hide both first to ensure clean state
+            tdpCompletion.style.display = 'none';
+            tdcCompletion.style.display = 'none';
+            
+            // Show appropriate completion based on role
+            if (role === 'tdp') {
+                console.log('Showing TDP completion');
+                completionContainer.style.display = 'block';
                 tdpCompletion.style.display = 'block';
                 tdcCompletion.style.display = 'none';
                 
@@ -1892,9 +1911,17 @@
                 if (state.contractSeqNo) {
                     document.getElementById('stored-seq-no').textContent = state.contractSeqNo;
                 }
-            } else {
+            } else if (role === 'tdc') {
+                console.log('Showing TDC completion');
+                completionContainer.style.display = 'block';
                 tdpCompletion.style.display = 'none';
                 tdcCompletion.style.display = 'block';
+            } else {
+                console.log('Unknown role:', role, '- hiding completion container');
+                // Unknown role, hide both and hide container
+                tdpCompletion.style.display = 'none';
+                tdcCompletion.style.display = 'none';
+                completionContainer.style.display = 'none';
             }
         }
 
@@ -2187,6 +2214,12 @@
             document.getElementById('btn-step6-next').disabled = true;
             document.getElementById('btn-step7-next').disabled = true;
             document.getElementById('seq-number-result').innerHTML = '';
+            
+            // Hide completion actions
+            const completionContainer = document.getElementById('completion-actions');
+            if (completionContainer) {
+                completionContainer.style.display = 'none';
+            }
 
             // Reset buttons to original state
             const btnUpdate = document.getElementById('btn-update-contract');
