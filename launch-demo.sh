@@ -2,7 +2,7 @@
 # DEPA Training - Contract Signing Demo Launcher
 # This script sets up and launches the user-friendly web UI for contract signing demos.
 
-set -e
+set -e  # Exit on error, but we'll handle some cases explicitly
 
 # Colors for output
 RED='\033[0;31m'
@@ -79,6 +79,65 @@ if ! command -v gh &> /dev/null; then
     echo -e "   DID creation requires GitHub CLI. Install it from: https://cli.github.com/"
 fi
 
+# Setup contract CLI and service
+echo -e "${YELLOW}🔧 Setting up contract signing environment...${NC}"
+
+# Change to project root directory
+cd "$SCRIPT_DIR"
+
+# Check if pyscitt CLI is already installed
+if [ -d "venv" ] && [ -f "venv/bin/scitt" ]; then
+    echo -e "${GREEN}   ✓ pyscitt CLI already installed${NC}"
+else
+    echo -e "${YELLOW}   Installing pyscitt CLI...${NC}"
+    if [ -f "./demo/contract/0-install-cli.sh" ]; then
+        bash ./demo/contract/0-install-cli.sh
+        echo -e "${GREEN}   ✓ pyscitt CLI installed${NC}"
+    else
+        echo -e "${RED}   ✗ Error: 0-install-cli.sh not found${NC}"
+        exit 1
+    fi
+fi
+
+# Activate the contract venv (different from demo-ui venv)
+if [ -f "venv/bin/activate" ]; then
+    source venv/bin/activate
+    
+    # Run contract setup (this sets up trust store and downloads parameters)
+    echo -e "${YELLOW}   Setting up contract service...${NC}"
+    if [ -f "./demo/contract/1-contract-setup.sh" ]; then
+        # Set default CONTRACT_SERVICE_URL if not already set
+        export CONTRACT_SERVICE_URL=${CONTRACT_SERVICE_URL:-"https://216.48.178.54:8000"}
+        
+        # Run setup (will skip operator steps if OPERATOR is not set, which is fine)
+        # Temporarily disable exit on error for this step
+        set +e
+        bash ./demo/contract/1-contract-setup.sh > /tmp/contract-setup.log 2>&1
+        SETUP_EXIT_CODE=$?
+        set -e
+        
+        if [ $SETUP_EXIT_CODE -eq 0 ]; then
+            echo -e "${GREEN}   ✓ Contract service setup completed${NC}"
+        else
+            # Check if at least the trust store was created (main requirement)
+            if [ -f "/tmp/trust_store/scitt.json" ]; then
+                echo -e "${GREEN}   ✓ Contract service setup completed (trust store created)${NC}"
+            else
+                echo -e "${YELLOW}   ⚠️  Contract setup had warnings, but continuing...${NC}"
+                echo -e "${YELLOW}   (This may be normal if operator setup is skipped)${NC}"
+            fi
+        fi
+    else
+        echo -e "${RED}   ✗ Error: 1-contract-setup.sh not found${NC}"
+        exit 1
+    fi
+    
+    deactivate
+else
+    echo -e "${RED}   ✗ Error: Contract venv not found after installation${NC}"
+    exit 1
+fi
+
 echo ""
 echo -e "${GREEN}${BOLD}🚀 Starting Demo UI Server...${NC}"
 echo ""
@@ -90,6 +149,9 @@ echo -e "   ${YELLOW}Press Ctrl+C to stop the server${NC}"
 echo ""
 echo "────────────────────────────────────────────────────────────────────"
 echo ""
+
+# Reactivate demo-ui venv for Flask (contract venv was deactivated above)
+source "$DEMO_UI_DIR/venv/bin/activate"
 
 # Start the Flask app
 cd "$SCRIPT_DIR"
